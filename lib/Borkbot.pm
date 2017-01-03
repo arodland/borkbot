@@ -5,11 +5,11 @@ use MooX::Options;
 use Try::Tiny;
 use YAML::Tiny;
 use Mojo::Pg;
-use Mojo::IRC;
 use again;
 use experimental 'postderef';
 
 use Borkbot::Logger;
+use Borkbot::IRC;
 
 option 'config_file' => (
   is => 'ro',
@@ -40,7 +40,7 @@ has 'irc' => (
     my $self = shift;
     my $config = $self->config->{irc};
 
-    Mojo::IRC->new(
+    Borkbot::IRC->new(
       server => $config->{server},
       nick => $config->{nick},
       name => $config->{ircname},
