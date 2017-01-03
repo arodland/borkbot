@@ -66,6 +66,7 @@ sub load_module {
 
   log_info { "Loading $name" };
   try {
+    delete $Moo::MAKERS{$module};
     require_again $module;
     $self->modules->{$name} = $module->new(
       bot => $self,
