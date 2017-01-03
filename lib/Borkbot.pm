@@ -72,7 +72,7 @@ sub load_module {
     );
     1;
   } catch {
-    log_warning { "Loading $module failed: $_ " }
+    log_warning { "Loading $module failed: $_" }
     0;
   };
 }
