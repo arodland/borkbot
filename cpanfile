@@ -1,4 +1,5 @@
 requires 'again';
+requires 'experimental';
 requires 'Log::Contextual';
 requires 'Log::Dispatch';
 requires 'Mojo::DOM';
@@ -7,5 +8,6 @@ requires 'Mojo::Pg';
 requires 'Mojo::UserAgent';
 requires 'Moo';
 requires 'MooX::Options';
+requires 'Try::Tiny';
 requires 'Types::Standard';
 requires 'YAML::Tiny';
