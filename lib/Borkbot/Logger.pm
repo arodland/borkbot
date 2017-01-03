@@ -18,6 +18,7 @@ our $logger = Log::Dispatch->new(
   ],
   callbacks => sub {
     my %msg = @_;
+    chomp($msg{message});
     return strftime("%Y-%m-%d %H:%M:%S ", localtime) . "[\U$msg{level}\E $package] $msg{message}";
   },
 ); 
