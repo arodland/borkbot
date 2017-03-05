@@ -1,4 +1,5 @@
 requires 'again';
+requires 'curry';
 requires 'experimental';
 requires 'Log::Contextual';
 requires 'Log::Dispatch';

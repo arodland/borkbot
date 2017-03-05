@@ -78,6 +78,28 @@ sub load_module {
   };
 }
 
+sub get_handlers {
+  my ($self, $method) = @_;
+  return grep { $_->can($method) } $self, $self->module_order->@*;
+}
+
+sub dispatch_event {
+  my ($self, $event) = @_;
+
+  my $type = $event->type;
+  my $method = "on_$type";
+  my @handlers = $self->get_handlers($method);
+  unless (@handlers) {
+    log_warn { "No handlers for event type $type" };
+    return;
+  }
+
+  for my $handler (@handlers) {
+    my $stop = $handler->$method($event);
+    last if $stop;
+  }
+}
+
 sub run {
   my ($self) = shift;
   Borkbot::Logger::set_logfile($self->config->{log}{file});
@@ -89,6 +111,14 @@ sub run {
       push $self->module_order->@*, $module;
     }
   }
+  
+  $self->irc->on(irc_any => sub {
+    my ($self, $ev) = @_;
+    my $event = Borkbot::Event->from_mojo_event($ev);
+    $self->dispatch_event($event);
+  });
+
+  $self->irc->connect;
 }
 
 1;
