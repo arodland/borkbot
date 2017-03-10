@@ -10,6 +10,7 @@ use experimental 'postderef';
 
 use Borkbot::Logger;
 use Borkbot::IRC;
+use Borkbot::Event;
 
 option 'config_file' => (
   is => 'ro',
@@ -90,7 +91,7 @@ sub dispatch_event {
   my $method = "on_$type";
   my @handlers = $self->get_handlers($method);
   unless (@handlers) {
-    log_warn { "No handlers for event type $type" };
+    log_warning { "No handlers for event type $type" };
     return;
   }
 
@@ -113,12 +114,20 @@ sub run {
   }
   
   $self->irc->on(irc_any => sub {
-    my ($self, $ev) = @_;
+    my ($irc, $ev) = @_;
     my $event = Borkbot::Event->from_mojo_event($ev);
     $self->dispatch_event($event);
   });
 
-  $self->irc->connect;
+  $self->irc->connect(sub {
+      my ($irc, $err) = @_;
+      if ($err) {
+        $self->dispatch_event(Borkbot::Event->new(type => 'irc_connect_error', error => $err));
+      } else {
+        $self->dispatch_event(Borkbot::Event->new(type => 'irc_connected'));
+      }
+  });
+  Mojo::IOLoop->start;
 }
 
 1;
