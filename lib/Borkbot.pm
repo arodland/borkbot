@@ -77,6 +77,16 @@ has 'debug_events' => (
   default => 0,
 );
 
+has 'in_channels' => (
+  is => 'rw',
+  default => sub { +{} },
+);
+
+sub in_channel {
+  my ($self, $channel) = @_;
+  return exists($self->in_channels->{$channel}) ? 1 : 0;
+}
+
 sub load_module {
   my ($self, $name) = @_;
   my $module = "Borkbot::Module::$name";
@@ -129,6 +139,22 @@ sub dispatch_event {
     my $stop = $handler->$method($event);
     last if $stop;
   }
+}
+
+sub on_irc_join {
+  my ($self, $ev) = @_;
+
+  log_info { "Joined " . $ev->channel };
+  $self->in_channels->{$ev->channel} = 1;
+  return 0;
+}
+
+sub on_irc_part {
+  my ($self, $ev) = @_;
+
+  log_info { "Left " . $ev->channel };
+  delete $self->in_channels->{$ev->channel};
+  return 0;
 }
 
 sub run {

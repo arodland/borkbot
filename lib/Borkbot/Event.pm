@@ -2,7 +2,7 @@ package Borkbot::Event;
 use Moo;
 use experimental 'postderef';
 
-has [qw(type raw from to nick user host visibility msg reply_to raw_args)] => (
+has [qw(type raw from to nick user host visibility msg reply_to channel raw_args)] => (
   is => 'rw',
 );
 
