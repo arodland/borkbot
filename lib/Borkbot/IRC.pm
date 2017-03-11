@@ -31,12 +31,12 @@ sub join {
 
 sub privmsg {
   my ($self, $target, $msg) = @_;
-  $self->write('PRIVMSG', $target, $msg);
+  $self->write('PRIVMSG', $target, ":$msg");
 }
 
 sub notice {
   my ($self, $target, $msg) = @_;
-  $self->write('NOTICE', $target, $msg);
+  $self->write('NOTICE', $target, ":$msg");
 }
 
 sub ctcp {
