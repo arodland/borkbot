@@ -5,12 +5,16 @@ use MooX::Options;
 use Try::Tiny;
 use YAML::Tiny;
 use Mojo::Pg;
+use Mojo::UserAgent;
+
 use again;
 use experimental 'postderef';
 
 use Borkbot::Logger;
 use Borkbot::IRC;
 use Borkbot::Event;
+
+our $VERSION = '0.01';
 
 option 'config_file' => (
   is => 'ro',
@@ -32,6 +36,13 @@ has 'pg' => (
   default => sub {
     my $self = shift;
     Mojo::Pg->new($self->config->{db}->%*);
+  },
+);
+
+has 'ua' => (
+  is => 'lazy',
+  default => sub {
+    Mojo::UserAgent->new;
   },
 );
 
@@ -61,6 +72,11 @@ has 'module_order' => (
   default => sub { +[] },
 );
 
+has 'debug_events' => (
+  is => 'rw',
+  default => 0,
+);
+
 sub load_module {
   my ($self, $name) = @_;
   my $module = "Borkbot::Module::$name";
@@ -81,7 +97,7 @@ sub load_module {
 
 sub get_handlers {
   my ($self, $method) = @_;
-  return grep { $_->can($method) } $self, $self->module_order->@*;
+  return grep { $_->can($method) } $self, map { $self->modules->{$_} } $self->module_order->@*;
 }
 
 sub dispatch_event {
@@ -90,10 +106,6 @@ sub dispatch_event {
   my $type = $event->type;
   my $method = "on_$type";
   my @handlers = $self->get_handlers($method);
-  unless (@handlers) {
-    log_warning { "No handlers for event type $type" };
-    return;
-  }
 
   for my $handler (@handlers) {
     my $stop = $handler->$method($event);
@@ -116,6 +128,7 @@ sub run {
   $self->irc->on(irc_any => sub {
     my ($irc, $ev) = @_;
     my $event = Borkbot::Event->from_mojo_event($ev);
+    log_debug { use Data::Dumper::Concise; Dumper($event) };
     $self->dispatch_event($event);
   });
 

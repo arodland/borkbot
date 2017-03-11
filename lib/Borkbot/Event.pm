@@ -2,7 +2,7 @@ package Borkbot::Event;
 use Moo;
 use experimental 'postderef';
 
-has [qw(type raw from to nick user host visibility msg raw_args)] => (
+has [qw(type raw from to nick user host visibility msg reply_to raw_args)] => (
   is => 'rw',
 );
 
@@ -39,12 +39,14 @@ sub from_mojo_event {
 
   if ($args{type} eq 'irc_join' || $args{type} eq 'irc_part') {
     $args{channel} = $ev->{params}[0];
-  } elsif ($args{type} eq 'irc_notice' || $args{type} eq 'irc_privmsg') {
+  } elsif ($args{type} eq 'irc_notice' || $args{type} eq 'irc_privmsg' || $args{type} =~ /^ctcp_/) {
     ($args{to}, $args{msg}) = $ev->{params}->@*;
     if ($args{to} =~ /^#/) {
       $args{visibility} = 'public';
+      $args{reply_to} = $args{to};
     } else {
       $args{visibility} = 'private';
+      $args{reply_to} = $args{nick};
     }
   } elsif ($args{type} eq 'irc_nick') {
     $args{newnick} = $ev->{params}[0];

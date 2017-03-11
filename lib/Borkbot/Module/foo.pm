@@ -1,14 +1,14 @@
 package Borkbot::Module::foo;
 use Moo;
-use Borkbot::Logger;
+use Borkbot::Module;
 
-has 'bot' => (
-  is => 'ro',
-  weak_ref => 1,
-);
+sub on_irc_privmsg {
+  my ($self, $ev) = @_;
+  
+  return 0 unless $ev->{msg} =~ /^\.foo\s*$/i;
 
-sub BUILD {
-  log_info { "bar!" }
+  $self->irc->privmsg($ev->{reply_to}, "bar!");
+  return 1;
 }
 
 1;

@@ -1,6 +1,7 @@
 requires 'again';
 requires 'curry';
 requires 'experimental';
+requires 'Data::Dumper::Concise';
 requires 'Log::Contextual';
 requires 'Log::Dispatch';
 requires 'Mojo::DOM';
