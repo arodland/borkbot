@@ -26,7 +26,18 @@ sub register_default_event_handlers {
 
 sub join {
   my ($self, $channel) = @_;
+
+  log_info { "Joining $channel" };
+
   $self->write('JOIN', $channel);
+}
+
+sub part {
+  my ($self, $channel) = @_;
+
+  log_info { "Leaving $channel" };
+
+  $self->write('PART', $channel);
 }
 
 sub privmsg {

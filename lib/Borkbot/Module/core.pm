@@ -12,10 +12,7 @@ sub on_irc_rpl_endofmotd {
 
   log_info { "Connected, joining channels." };
 
-  for my $channel (
-    $self->bot->config->{irc}{control_channel},
-    $self->bot->config->{irc}{channels}->@*
-  ) {
+  for my $channel ($self->bot->config->{irc}{channels}->@*) {
     $self->irc->join($channel);
   }
   return 0;

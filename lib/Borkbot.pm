@@ -95,6 +95,17 @@ sub load_module {
   };
 }
 
+sub unload_module {
+  my ($self, $name) = @_;
+
+  log_info { "Unloading $name" };
+
+  delete $self->modules->{$name};
+  $self->module_order([
+    grep { $_ ne $name } $self->module_order->@*
+  ]);
+}
+
 sub get_handlers {
   my ($self, $method) = @_;
   return grep { $_->can($method) } $self, map { $self->modules->{$_} } $self->module_order->@*;
