@@ -49,6 +49,10 @@ sub on_irc_privmsg {
   } elsif ($ev->msg =~ /^\.leave\s(\S+)$/i) {
     $self->irc->part($1);
     return 1;
+  } elsif ($ev->msg =~ /^\.reload_config\s*$/i) {
+    $self->bot->clear_config;
+    $self->bot->config;
+    return 1;
   }
 
   return 0;

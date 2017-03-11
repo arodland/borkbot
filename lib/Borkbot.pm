@@ -29,6 +29,7 @@ has 'config' => (
     my $self = shift;
     YAML::Tiny->read($self->config_file)->[0];
   },
+  clearer => 'clear_config',
 );
 
 has 'pg' => (
