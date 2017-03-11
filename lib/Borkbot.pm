@@ -148,6 +148,8 @@ sub dispatch_event {
 sub on_irc_join {
   my ($self, $ev) = @_;
 
+  return 0 unless $ev->nick eq $self->irc->nick;
+
   log_info { "Joined " . $ev->channel };
   $self->in_channels->{$ev->channel} = 1;
   return 0;
@@ -155,6 +157,8 @@ sub on_irc_join {
 
 sub on_irc_part {
   my ($self, $ev) = @_;
+
+  return 0 unless $ev->nick eq $self->irc->nick;
 
   log_info { "Left " . $ev->channel };
   delete $self->in_channels->{$ev->channel};
