@@ -13,4 +13,6 @@ requires 'MooX::Options';
 requires 'Text::ParseWords';
 requires 'Try::Tiny';
 requires 'Types::Standard';
+requires 'WWW::Shorten';
+requires 'WWW::Shorten::TinyURL';
 requires 'YAML::Tiny';
