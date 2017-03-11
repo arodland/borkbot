@@ -52,12 +52,12 @@ sub notice {
 
 sub ctcp {
   my ($self, $target, $cmd, @args) = @_;
-  $self->privmsg($target, $self->SUPER::ctcp($cmd, @args));
+  $self->write('PRIVMSG', $target, $self->SUPER::ctcp($cmd, @args));
 }
 
 sub nctcp {
   my ($self, $target, $cmd, @args) = @_;
-  $self->notice($target, $self->SUPER::ctcp($cmd, @args));
+  $self->write('NOTICE', $target, $self->SUPER::ctcp($cmd, @args));
 }
 
 sub action {
