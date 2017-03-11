@@ -17,7 +17,11 @@ sub on_irc_privmsg {
   my $history_len = $self->bot->config->{regexp}{history_len} // 30;
 
   if (my $history = $self->history->{$channel}) {
-    if (my ($match, $replace, $opts) = $ev->msg =~ m|^\.s/([^/]+)/([^/]*)/(g?)\s*$|) {
+    if (my ($match, $replace, $opts) = $ev->msg =~ m|^\.s/([^/]+)/([^/]*)/([ig]*)\s*$|) {
+      if ($opts =~ /i/) {
+        $match = qr/$match/i;
+      }
+
       for my $line (@$history) {
         if (lc $line->{nick} eq lc $ev->nick) {
           my $matched;
