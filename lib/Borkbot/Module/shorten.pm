@@ -15,12 +15,14 @@ sub do_shorten {
   my ($self, $ev) = @_;
   my $min_len = $self->min_len;
 
-  my $url;
+  my ($url, $addressed);
 
   if ($ev->msg =~ /^.shorten\s+(https?:\/\/.*)/i) {
     $url = $1;
+    $addressed = 1;
   } elsif ($min_len &&  $ev->msg =~ m#(https?://\S{$min_len,})#) {
     $url = $1;
+    $addressed = 0;
   } else {
     return 0;
   }
@@ -32,8 +34,11 @@ sub do_shorten {
     sub {
       my ($subprocess, $err, $short_url) = @_;
       if ($err) {
-        # fail silently
-        log_warning { "short_link failed with $err " };
+        $err =~ s/\n\z//;
+        log_warning { "short_link failed with $err" };
+        if ($addressed) { # Fail silently if we weren't specifically asked to shorten
+          $self->irc->privmsg($ev->reply_to, "[shorten] error.");
+        }
       } else {
         $self->irc->privmsg($ev->reply_to, $ev->nick . "'s URL is at: $short_url");
       }
