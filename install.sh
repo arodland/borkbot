@@ -1,4 +1,4 @@
 #!/bin/bash
 git submodule update --init
 chmod +x cpm/cpm
-./cpm/cpm install
+PERL_USE_UNSAFE_INC=1 ./cpm/cpm install
