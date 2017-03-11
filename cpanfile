@@ -10,6 +10,7 @@ requires 'Mojo::Pg';
 requires 'Mojo::UserAgent';
 requires 'Moo';
 requires 'MooX::Options';
+requires 'Text::ParseWords';
 requires 'Try::Tiny';
 requires 'Types::Standard';
 requires 'YAML::Tiny';
