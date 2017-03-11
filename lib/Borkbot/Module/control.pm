@@ -38,7 +38,7 @@ sub on_irc_privmsg {
   log_info { "<" . $ev->from . "> " . $ev->msg };
 
   if ($ev->msg =~ /^\.(?:re)?load\s+(\S+)$/i) {
-    $self->bot->load_module($1);
+    $self->bot->load_and_append_module($1);
     return 1;
   } elsif ($ev->msg =~ /^\.unload\s+(\S+)$/i) {
     $self->bot->unload_module($1);

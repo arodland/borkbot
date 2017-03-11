@@ -95,6 +95,13 @@ sub load_module {
   };
 }
 
+sub load_and_append_module {
+  my ($self, $name) = @_;
+  if ($self->load_module($name)) {
+    push $self->module_order->@*, $name;
+  }
+}
+
 sub unload_module {
   my ($self, $name) = @_;
 
