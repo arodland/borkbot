@@ -1,6 +1,7 @@
 package Borkbot::IRC;
 use strict;
 use warnings;
+use Borkbot::Logger;
 use Mojo::Base 'Mojo::IRC::UA';
 use Parse::IRC;
 
