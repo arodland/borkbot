@@ -143,7 +143,7 @@ sub run {
     }
   }
   
-  $self->irc->on(irc_any => sub {
+  $self->irc->on(message => sub {
     my ($irc, $ev) = @_;
     my $event = Borkbot::Event->from_mojo_event($ev);
     log_debug { use Data::Dumper::Concise; Dumper($event) };

@@ -20,6 +20,8 @@ my %event_args = (
 sub from_mojo_event {
   my ($class, $ev) = @_;
 
+  $ev->{event} = "irc_" . $ev->{event} unless $ev->{event} =~ /^(ctcp|err)_/;
+
   my %args = (
     type => $ev->{event},
     raw_args => $ev->{params},

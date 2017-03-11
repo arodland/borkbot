@@ -11,7 +11,6 @@ sub new {
   my $class = shift;
   my $self = $class->SUPER::new(
     parser => Parse::IRC->new(ctcp => 1),
-    track_any => 1,
     @_,
   );
   return $self;
