@@ -107,9 +107,13 @@ sub load_module {
 
 sub load_and_append_module {
   my ($self, $name) = @_;
-  if ($self->load_module($name)) {
+  unless ($self->load_module($name)) {
+    return 0;
+  }
+  unless (grep { $_ eq $name } $self->module_order->@*) {
     push $self->module_order->@*, $name;
   }
+  return 1;
 }
 
 sub unload_module {
@@ -164,9 +168,7 @@ sub run {
   log_info { "started up!" };
 
   for my $module ($self->config->{modules}->@*) {
-    if ($self->load_module($module)) {
-      push $self->module_order->@*, $module;
-    }
+    $self->load_and_append_module($module);
   }
   
   $self->irc->on(message => sub {
