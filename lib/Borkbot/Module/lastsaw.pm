@@ -24,7 +24,7 @@ sub update_saw {
   my $txn = $db->begin;
   future($db->curry::update('lastsaw', { lastsaid => $last_msg, time => \'CURRENT_TIMESTAMP' }, { person => $nick }))
   ->then(sub {
-    my ($results) = @_;
+    my ($db, $results) = @_;
     if ($results->rows == 0) {
       return future $db->curry::insert('lastsaw', { lastsaid => $last_msg, time => \'CURRENT_TIMESTAMP', person => $nick });
     } else {
@@ -89,11 +89,13 @@ sub on_irc_privmsg {
     $self->do_lastsaid($ev, $1);
   }
   $self->update_saw($ev) if $ev->visibility eq 'public';
+  return 0;
 }
 
 sub on_ctcp_action {
   my ($self, $ev) = @_;
   $self->update_saw($ev) if $ev->visibility eq 'public';
+  return 0;
 }
 
 

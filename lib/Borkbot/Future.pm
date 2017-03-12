@@ -12,11 +12,11 @@ sub future {
   my ($cb) = @_;
   my $future = __PACKAGE__->new;
   $cb->(sub {
-      my (undef, $err, @results) = @_;
+      my ($obj, $err, @results) = @_;
       if ($err) {
         $future->fail_next_tick($err);
       } else {
-        $future->done_next_tick(@results);
+        $future->done_next_tick($obj, @results);
       }
     }
   );
