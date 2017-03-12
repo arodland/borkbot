@@ -3,6 +3,7 @@ requires 'curry';
 requires 'experimental';
 requires 'Data::Dumper::Concise';
 requires 'Date::Discordian';
+requires 'Future::Mojo';
 requires 'Log::Contextual';
 requires 'Log::Dispatch';
 requires 'Mojo::DOM';
