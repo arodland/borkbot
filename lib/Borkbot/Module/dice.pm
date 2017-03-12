@@ -227,6 +227,7 @@ sub on_irc_privmsg {
 
     log_debug { $final };
     $self->irc->privmsg( $send_to, $final );
+    return 1;
 }
 
 sub roll_dice {
