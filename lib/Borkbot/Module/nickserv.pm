@@ -8,7 +8,7 @@ sub on_irc_privmsg {
   my $password = $self->bot->config->{nickserv}{password};
   return 0 unless defined $password;
 
-  if ($ev->to eq $self->bot->modules->{control}->control_channel || $ev->visibility eq 'private') {
+  if ($self->is_control_channel($ev->to)) {
     if ($ev->msg =~ /^\.register\s*$/i) {
       $self->irc->privmsg("nickserv", "register $password");
       return 1;

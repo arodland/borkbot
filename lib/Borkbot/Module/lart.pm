@@ -23,7 +23,7 @@ sub on_irc_privmsg {
       $self->reason(undef);
       $self->anonymous(0);
     } elsif (($channel, $target, my $reason) = $ev->msg =~ /^\.anonlart\s+(?:(\#\w+) )?([\w\.\-\#\|\[\]\{\}\\\^\/]+)(?:\s+(.+))?/i) {
-      if ($ev->to ne $self->bot->modules->{control}->control_channel) {
+      unless ($self->is_control_channel($ev->to)) {
         log_warning { "unprivileged anonlart from " . $ev->from . " on " . $ev->to };
         return 1;
       }

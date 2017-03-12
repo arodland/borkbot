@@ -88,6 +88,12 @@ sub in_channel {
   return exists($self->in_channels->{$channel}) ? 1 : 0;
 }
 
+sub is_control_channel {
+  my ($self, $channel) = @_;
+  return 0 unless exists $self->modules->{control};
+  return $channel eq $self->modules->{control}->control_channel;
+}
+
 sub load_module {
   my ($self, $name) = @_;
   my $module = "Borkbot::Module::$name";

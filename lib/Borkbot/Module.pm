@@ -8,6 +8,7 @@ has 'bot' => (
     irc
     ua
     pg
+    is_control_channel
   )],
 );
 
