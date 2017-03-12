@@ -20,7 +20,7 @@ sub do_shorten {
   if ($ev->msg =~ /^.shorten\s+(https?:\/\/.*)/i) {
     $url = $1;
     $addressed = 1;
-  } elsif ($min_len &&  $ev->msg =~ m#(https?://\S{$min_len,})#) {
+  } elsif ($ev->visibility eq 'public' && $min_len && $ev->msg =~ m#(https?://\S{$min_len,})#) {
     $url = $1;
     $addressed = 0;
   } else {
@@ -45,15 +45,13 @@ sub do_shorten {
     }
   );
 
-  return 0;
+  return $addressed;
 }
 
 sub on_irc_privmsg {
   my ($self, $ev) = @_;
 
-  unless ($ev->msg =~ /^\.remember/i) {
-    $self->do_shorten($ev);
-  }
+  $self->do_shorten($ev);
 }
 
 sub on_ctcp_action {
