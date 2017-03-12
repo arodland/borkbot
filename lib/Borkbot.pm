@@ -41,6 +41,16 @@ has 'pg' => (
     $pg->dsn($config->{dsn});
     $pg->username($config->{username}) if defined $config->{username};
     $pg->password($config->{password}) if defined $config->{password};
+    if ($config->{debug}) {
+      $pg->options(
+        { 
+          AutoCommit => 1,
+          RaiseError => 1,
+          pg_server_prepare => 0,
+          TraceLevel => DBD::Pg->parse_trace_flag('SQL') 
+        }
+      );
+    }
     $pg;
   },
 );
