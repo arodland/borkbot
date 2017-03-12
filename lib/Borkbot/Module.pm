@@ -9,6 +9,7 @@ has 'bot' => (
     ua
     pg
     is_control_channel
+    in_channel
   )],
 );
 

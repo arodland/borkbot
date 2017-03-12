@@ -56,7 +56,7 @@ sub on_irc_privmsg {
   } elsif (lc $self->target eq lc $self->larter && $self->anonymous) {
     $self->irc->action($self->error_to, "LARTs " . $self->larter . " with a clue-by-four (you asked for it!)");
     return 1;
-  } elsif (! $self->bot->in_channel($self->channel)) {
+  } elsif (! $self->in_channel($self->channel)) {
     $self->irc->privmsg($self->error_to, "I'm not in " . $self->channel . "!");
     return 1;
   }
