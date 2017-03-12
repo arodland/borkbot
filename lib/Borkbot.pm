@@ -36,7 +36,12 @@ has 'pg' => (
   is => 'lazy',
   default => sub {
     my $self = shift;
-    Mojo::Pg->new($self->config->{db}->%*);
+    my $config = $self->config->{db};
+    my $pg = Mojo::Pg->new;
+    $pg->dsn($config->{dsn});
+    $pg->username($config->{username}) if defined $config->{username};
+    $pg->password($config->{password}) if defined $config->{password};
+    $pg;
   },
 );
 
