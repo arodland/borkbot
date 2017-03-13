@@ -106,7 +106,7 @@ sub in_channel {
 sub is_control_channel {
   my ($self, $channel) = @_;
   return 0 unless exists $self->modules->{control};
-  return $channel eq $self->modules->{control}->control_channel;
+  return lc($channel) eq lc($self->modules->{control}->control_channel);
 }
 
 sub load_module {

@@ -34,7 +34,7 @@ sub on_irc_rpl_endofmotd {
 sub on_irc_privmsg {
   my ($self, $ev) = @_;
 
-  return 0 unless $ev->to eq $self->control_channel;
+  return 0 unless lc($ev->to) eq lc($self->control_channel);
 
   log_info { "<" . $ev->from . "> " . $ev->msg };
 
