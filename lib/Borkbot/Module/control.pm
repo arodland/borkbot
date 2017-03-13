@@ -28,6 +28,7 @@ sub on_irc_rpl_endofmotd {
   log_info { "Joining control channel." };
 
   $self->irc->join($control_channel);
+  return 0;
 }
 
 sub on_irc_privmsg {
