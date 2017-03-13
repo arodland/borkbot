@@ -46,7 +46,7 @@ sub on_irc_privmsg {
   } elsif ($msg =~ /^\.(ordered|or)\s+($kw)\s*$/i) {
     $self->do_ordered($ev, $2, 1);
     return 1;
-  } elsif ($msg =~ /^\.(uordered|uo)\s+($kw)\s*$/i) {
+  } elsif ($msg =~ /^\.(unordered|uo)\s+($kw)\s*$/i) {
     $self->do_ordered($ev, $2, 0);
     return 1;
   } elsif ($msg =~ /^\.count\s+($kw)\s*$/i) {
@@ -267,7 +267,7 @@ sub do_readonly {
   my ($self, $ev, $keyword, $readonly) = @_;
   my $desc = $readonly ? "read only" : "read write";
 
-  $self->set_ro($keyword, $readonly)
+  $self->set_readonly($keyword, $readonly)
   ->then(sub {
     my ($db, $result) = @_;
     if ($result->rows) {
