@@ -26,7 +26,8 @@ sub on_ctcp_ping {
 
 sub on_ctcp_version {
   my ($self, $ev) = @_;
-  $self->irc->nctcp($ev->{reply_to}, VERSION => "Borkbot $Borkbot::VERSION");
+  $self->irc->nctcp($ev->{reply_to}, VERSION => "Borkbot $Borkbot::VERSION (core by hobbs, sporksbot by beez, contributions from various sporkers)");
+  $self->irc->nctcp($ev->{reply_to}, VERSION => "Modules loaded: " . join(", ", sort keys $self->bot->modules->%*));
   return 1;
 }
 
