@@ -14,7 +14,7 @@ use Borkbot::Logger;
 use Borkbot::IRC;
 use Borkbot::Event;
 
-our $VERSION = '0.01';
+our $VERSION = '0.10';
 
 option 'config_file' => (
   is => 'ro',
