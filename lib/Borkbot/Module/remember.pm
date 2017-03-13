@@ -409,7 +409,7 @@ sub forget_item {
 
 sub try_recall {
   my ($self, $pattern) = @_;
-  future($self->pg->db->curry::select('memory', ['keyword'], { keyword => { -ilike => "%${pattern}%" } }));
+  future($self->pg->db->curry::query('select distinct keyword from memory where keyword ilike ?', "%${pattern}%"));
 }
 
 sub set_readonly {
