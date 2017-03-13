@@ -31,7 +31,7 @@ sub on_irc_rpl_endofmotd {
   my ($self, $ev) = @_;
 
 
-  my $password = $self->bot->config->{nickserv_password};
+  my $password = $self->bot->config->{nickserv}{password};
   return 0 unless defined $password;
   log_info { "identifying." };
   $self->irc->privmsg("nickserv", "identify $password");
