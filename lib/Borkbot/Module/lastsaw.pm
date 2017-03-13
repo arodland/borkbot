@@ -45,7 +45,7 @@ sub get_lastsaw {
   my ($self, $nick) = @_;
   future($self->pg->db->curry::select('lastsaw', ['time','lastsaid'], { person => $nick }))
   ->then(sub {
-    my ($results) = @_;
+    my ($db, $results) = @_;
     return Borkbot::Future->done($results->hash);
   })->else(sub {
     my ($err) = @_;
