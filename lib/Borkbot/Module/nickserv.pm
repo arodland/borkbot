@@ -10,13 +10,16 @@ sub on_irc_privmsg {
 
   if ($self->is_control_channel($ev->to)) {
     if ($ev->msg =~ /^\.register\s*$/i) {
+      log_info { "registering." };
       $self->irc->privmsg("nickserv", "register $password");
       return 1;
     } elsif ($ev->msg =~ /^\.identify\s*$/i) {
+      log_info { "identifying." };
       $self->irc->privmsg("nickserv", "identify $password");
       return 1;
     }
   } elsif (lc $ev->nick eq 'nickserv' && $ev->msg =~ /This nick belongs to another user/i) {
+    log_info { "identifying." };
     $self->irc->privmsg("nickserv", "identify $password");
     return 1;
   }
@@ -30,6 +33,7 @@ sub on_irc_rpl_endofmotd {
 
   my $password = $self->bot->config->{nickserv_password};
   return 0 unless defined $password;
+  log_info { "identifying." };
   $self->irc->privmsg("nickserv", "identify $password");
   return 1;
 }
