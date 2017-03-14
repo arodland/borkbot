@@ -55,7 +55,7 @@ sub on_irc_privmsg {
   } elsif ($msg =~ m[^(o/~|o/`) .+]) {
     $self->do_autoremember($ev, "lyrics", $msg);
     return 0;
-  } elsif ($msg =~ m[((http|ftp)://\S+)]) {
+  } elsif ($msg =~ m[((https?|ftp)://\S+)]) {
     $self->do_autoremember($ev, "urls", $1);
     return 0;
   }
