@@ -15,7 +15,9 @@ sub on_irc_privmsg {
         $self->irc->privmsg($ev->{reply_to}, "Kitty can has error: " . $res->message);
         return;
       }
-      $self->irc->privmsg($ev->{reply_to}, $res->headers->location);
+      my $url = $res->headers->location;
+      $url =~ s/29\.media\.tumblr\.com/25.media.tumblr.com/; # Work around cat API brokenness
+      $self->irc->privmsg($ev->{reply_to}, $url);
   });
 
   return 1;
