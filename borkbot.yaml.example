@@ -1,0 +1,32 @@
+irc:
+  server: "irc.example.net:6667"
+  ircname: "Bork Bot"
+  nick: borkbot
+  username: borkbot
+  channels:
+    - "#borkbot"
+  control_channel: "#secret CHANNELPASS"
+
+db:
+  dsn: "dbi:Pg:dbname=borkbot;host=localhost"
+  username: "DBUSER"
+  password: "DBPASS"
+
+modules:
+  - core
+  - control
+  - nickserv
+  - lastsaw
+  - remember
+  - foo
+
+log:
+  stderr:
+    enabled: true
+  file:
+    enabled: true
+    level: info
+    filename: "borkbot.log"
+
+nickserv:
+  password: NICKSERVPASS
