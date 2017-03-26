@@ -15,7 +15,7 @@ sub on_irc_privmsg {
         $self->irc->privmsg($ev->{reply_to}, "Catfact can has error: " . $res->message);
         return;
       }
-      my $fact = $res->headers->json('/facts/0');
+      my $fact = $res->json('/facts/0');
       $self->irc->privmsg($ev->{reply_to}, "Thank you for subscribing to CatFacts(tm)!");
       $self->irc->privmsg($ev->{reply_to}, $fact);
   });
