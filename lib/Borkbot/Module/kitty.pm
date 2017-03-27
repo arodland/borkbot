@@ -16,7 +16,7 @@ sub on_irc_privmsg {
         return;
       }
       my $url = $res->headers->location;
-      $url =~ s/29\.media\.tumblr\.com/25.media.tumblr.com/; # Work around cat API brokenness
+      $url =~ s/2[6789]\.media\.tumblr\.com/25.media.tumblr.com/; # Work around cat API brokenness
       $self->irc->privmsg($ev->{reply_to}, $url);
   });
 
