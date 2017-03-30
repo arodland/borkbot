@@ -15,7 +15,7 @@ sub on_irc_privmsg {
   ))->then(sub {
     my ($db, $result) = @_;
     if ($result->rows == 0) {
-      $self->irc->privmsg($ev->reply_to, "Some say he only knows two facts about kittens, and they're both wrong.");
+      $self->irc->privmsg($ev->reply_to, "Some say he only knows two facts about kittens, and both of them are wrong. All we know is, he's called the " . $self->irc->nick . ".");
     } else {
       $self->irc->privmsg($ev->reply_to, $result->array->[0]);
     }
