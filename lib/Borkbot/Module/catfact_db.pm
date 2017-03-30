@@ -10,7 +10,7 @@ sub on_irc_privmsg {
 
   future($self->pg->db->curry::query(
     "select definition from memory"
-    ." where keyword='catfact'"
+    ." where keyword='catfacts'"
     ." order by random() limit 1"
   ))->then(sub {
     my ($db, $result) = @_;
