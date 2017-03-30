@@ -43,7 +43,7 @@ sub on_irc_privmsg {
   my ($self, $ev) = @_;
 
   return 0 unless $ev->{msg} =~ /^\.catfact\s*$/i;
-  if (rand < 0.5) {
+  if (rand() < 0.5) {
     $self->do_api($ev); # Get it from the catfacts API
   } else {
     $self->do_factoid($ev); # Get it from the DB
