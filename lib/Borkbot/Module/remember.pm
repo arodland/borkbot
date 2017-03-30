@@ -18,10 +18,10 @@ sub on_irc_privmsg {
     $self->do_remember($ev, $1, $2);
     return 1;
   } elsif ($msg =~ /^\.recall\s+($kw)\s*/i) {
-    $self->do_recall($ev, $1);
+    $self->do_recall($ev, $1, undef);
     return 1;
   } elsif ($msg =~ /^\.match\s+($kw)\s+(.+)/i) {
-    $self->do_match($ev, $1, $2);
+    $self->do_recall($ev, $1, $2);
     return 1;
   } elsif ($msg =~ /^\.details\s*$/i) {
     $self->do_details($ev);
@@ -148,16 +148,20 @@ sub do_autoremember {
 }
 
 sub do_recall {
-  my ($self, $ev, $keyword) = @_;
+  my ($self, $ev, $keyword, $pattern) = @_;
 
   my $items;
 
-  $self->recall_item($keyword)
+  $self->recall_item($keyword, $pattern)
   ->then(sub {
     my ($db, $recall_item) = @_;
 
     if (!$recall_item->rows) {
-      return failure("I don't know anything about $keyword.");
+      if (defined $pattern) {
+        return failure("I don't know anything about $keyword matching $pattern.");
+      } else {
+        return failure("I don't know anything about $keyword.");
+      }
     } else {
       $items = $recall_item->hashes;
       $self->test_unordered($keyword);
@@ -347,7 +351,7 @@ sub test_ro {
 
 sub test_unordered {
   my ($self, $keyword) = @_;
-  
+
   future($self->pg->db->curry::select('memory', 'count(*)', { keyword => lc($keyword), ordered => 'f' }))
   ->then(sub {
     my ($db, $result) = @_;
@@ -397,9 +401,16 @@ sub remember_item {
 }
 
 sub recall_item {
-  my ($self, $keyword) = @_;
+  my ($self, $keyword, $pattern) = @_;
 
-  future($self->pg->db->curry::select('memory', undef, { keyword => lc $keyword }, { -asc => 'time' }));
+  my $query = { keyword => lc $keyword };
+  if (defined $pattern) {
+    $pattern =~ s/_/\\_/g;
+    $pattern =~ s/^\s+|\s+$//g;
+    $query->{definition} = { -ilike => "\%$pattern\%" };
+  }
+
+  future($self->pg->db->curry::select('memory', undef, $query, { -asc => 'time' }));
 }
 
 sub forget_item {
