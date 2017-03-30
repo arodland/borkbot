@@ -17,7 +17,7 @@ sub on_irc_privmsg {
     if ($result->rows == 0) {
       $self->irc->privmsg($ev->reply_to, "Some say he only knows two facts about kittens, and they're both wrong.");
     } else {
-      $self->irc->privmsg($result->array->[0]);
+      $self->irc->privmsg($ev->reply_to, $result->array->[0]);
     }
     return Borkbot::Future->done;
   })->else(sub {
