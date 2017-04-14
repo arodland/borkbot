@@ -27,6 +27,10 @@ sub on_irc_privmsg {
 
   my @lines = $self->run(shellwords($cmdline));
 
+  if (!@lines) {
+    @lines = ("No output.");
+  }
+
   if (@lines > ($self->bot->config->{uni}{max_lines} || 7)) {
     my $uri = $self->bot->nopaste(text => join("\n", @lines));
     $self->irc->privmsg($ev->reply_to, $uri);
