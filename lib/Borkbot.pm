@@ -6,6 +6,7 @@ use Try::Tiny;
 use YAML::Tiny;
 use Mojo::Pg;
 use Mojo::UserAgent;
+use App::Nopaste ();
 
 use again;
 use experimental 'postderef';
@@ -126,6 +127,20 @@ sub load_module {
     0;
   };
 }
+
+sub nopaste {
+  my ($self, @args) = @_;
+  local $ENV{NOPASTE_MOJOPASTE_WEBPATH};
+  if (my $url = $self->config->{nopaste}{url}) {
+    $ENV{NOPASTE_MOJOPASTE_WEBPATH} = $url;
+  }
+  return App::Nopaste::nopaste(
+    services => ['Mojopaste'],
+    nick => $self->irc->nick,
+    @args,
+  );
+}
+
 
 sub load_and_append_module {
   my ($self, $name) = @_;
