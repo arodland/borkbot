@@ -2,6 +2,8 @@ requires 'again';
 requires 'curry';
 requires 'experimental';
 requires 'App::Nopaste';
+requires 'App::Uni';
+requires 'Capture::Tiny';
 requires 'Data::Dumper::Concise';
 requires 'Date::Discordian';
 requires 'Future';
