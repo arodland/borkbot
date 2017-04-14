@@ -15,7 +15,7 @@ use charnames ();
 
 my @uninames;
 BEGIN {
-  my $data = require 'unicore/Name.pl';
+  my $data = do 'unicore/Name.pl';
   @uninames = split /\cJ/, $data;
 }
 
