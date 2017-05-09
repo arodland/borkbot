@@ -44,7 +44,7 @@ sub on_irc_connect_error {
   Mojo::IOLoop->timer($wait => $self->bot->curry::connect);
 }
 
-sub on_irc_closed {
+sub on_irc_close {
   my ($self, $ev) = @_;
   log_warning { "IRC disconnected, reconnecting..." };
   $self->bot->connect;
