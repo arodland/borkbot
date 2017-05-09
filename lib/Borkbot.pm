@@ -202,6 +202,20 @@ sub on_irc_part {
   return 0;
 }
 
+sub connect {
+  my ($self) = shift;
+
+  log_info { "connecting to IRC." };
+  $self->irc->connect(sub {
+      my ($irc, $err) = @_;
+      if ($err) {
+        $self->dispatch_event(Borkbot::Event->new(type => 'irc_connect_error', error => $err));
+      } else {
+        $self->dispatch_event(Borkbot::Event->new(type => 'irc_connected'));
+      }
+  });
+}
+
 sub run {
   my ($self) = shift;
   Borkbot::Logger::set_logfile($self->config->{log}{file});
@@ -219,14 +233,8 @@ sub run {
     $self->dispatch_event($event);
   });
 
-  $self->irc->connect(sub {
-      my ($irc, $err) = @_;
-      if ($err) {
-        $self->dispatch_event(Borkbot::Event->new(type => 'irc_connect_error', error => $err));
-      } else {
-        $self->dispatch_event(Borkbot::Event->new(type => 'irc_connected'));
-      }
-  });
+  $self->connect;
+
   Mojo::IOLoop->start;
 }
 
