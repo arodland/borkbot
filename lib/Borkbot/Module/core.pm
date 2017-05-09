@@ -37,4 +37,23 @@ sub on_ctcp_time {
   return 1;
 }
 
+sub on_irc_connect_error {
+  my ($self, $ev) = @_;
+  my $wait = $self->bot->config->{irc}{reconnect_wait} || 120;
+  log_warning { "IRC connection error: " . $ev->{error} . ", reconnecting in $wait seconds." };
+  Mojo::IOLoop->timer($wait => $self->bot->curry::connect);
+}
+
+sub on_irc_closed {
+  my ($self, $ev) = @_;
+  log_warning { "IRC disconnected, reconnecting..." };
+  $self->bot->connect;
+}
+
+sub on_irc_error {
+  my ($self, $ev) = @_;
+  log_warning { "IRC stream error: " . $ev->{error} . ", reconnecting..." };
+  $self->bot->connect;
+}
+
 1;
