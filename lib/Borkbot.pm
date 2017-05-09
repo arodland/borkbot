@@ -233,6 +233,15 @@ sub run {
     $self->dispatch_event($event);
   });
 
+  $self->irc->on(close => sub {
+    $self->dispatch_event(Borkbot::Event->new(type => 'irc_close'));
+  });
+
+  $self->irc->on(error => sub {
+    my (undef, $ev) = @_;
+    $self->dispatch_event(Borkbot::Event->new(type => 'irc_error', error => $ev->{error}));
+  });
+
   $self->connect;
 
   Mojo::IOLoop->start;
