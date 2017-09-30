@@ -1,6 +1,6 @@
 package Borkbot;
 use Moo;
-use MooX::Options;
+use CLI::Osprey;
 
 use Try::Tiny;
 use YAML::Tiny;
