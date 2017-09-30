@@ -6,6 +6,7 @@ use Try::Tiny;
 use YAML::Tiny;
 use Mojo::UserAgent;
 use App::Nopaste ();
+use Scalar::Util 'blessed';
 
 use again;
 use experimental 'postderef';
@@ -177,7 +178,12 @@ sub dispatch_event {
   my @handlers = $self->get_handlers($method);
 
   for my $handler (@handlers) {
-    my $stop = $handler->$method($event);
+    my $stop = try {
+      $handler->$method($event);
+    } catch {
+      log_warning { (blessed($handler) || $handler) . " threw exception in $method: $_" };
+      0;
+    };
     last if $stop;
   }
 }
