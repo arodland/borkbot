@@ -4,7 +4,6 @@ use MooX::Options;
 
 use Try::Tiny;
 use YAML::Tiny;
-use Mojo::Pg;
 use Mojo::UserAgent;
 use App::Nopaste ();
 
@@ -38,6 +37,7 @@ has 'pg' => (
   default => sub {
     my $self = shift;
     my $config = $self->config->{db};
+    require Mojo::Pg;
     my $pg = Mojo::Pg->new;
     $pg->dsn($config->{dsn});
     $pg->username($config->{username}) if defined $config->{username};
@@ -220,6 +220,11 @@ sub run {
   my ($self) = shift;
   Borkbot::Logger::set_logfile($self->config->{log}{file});
   Borkbot::Logger::set_stderr($self->config->{log}{stderr});
+
+  if ($self->config->{db}) {
+    $self->pg;
+  }
+
   log_info { "started up!" };
 
   for my $module ($self->config->{modules}->@*) {
