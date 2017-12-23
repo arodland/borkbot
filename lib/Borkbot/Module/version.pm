@@ -40,7 +40,6 @@ sub on_irc_privmsg {
   if ($ev->msg =~ /^\.version\s*$/) {
     $self->get_version(sub {
       my ($version) = @_;
-      log_warning { $version };
       $self->irc->privmsg($ev->reply_to, $version);
     });
     return 1;
@@ -55,7 +54,6 @@ sub on_ctcp_version {
   my ($self, $ev) = @_;
   $self->get_version(sub {
     my ($version) = @_;
-    log_warning { $version };
     $self->irc->nctcp($ev->reply_to, $version);
     $self->irc->nctcp($ev->reply_to, $self->get_modules);
   });
