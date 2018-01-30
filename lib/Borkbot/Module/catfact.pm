@@ -6,14 +6,14 @@ use Borkbot::Future;
 sub do_api {
   my ($self, $ev) = @_;
 
-  $self->ua->get('https://catfacts-api.appspot.com/api/facts' => sub {
+  $self->ua->get('https://catfact.ninja/fact' => sub {
       my ($ua, $tx) = @_;
       my $res = $tx->result;
       if ($res->is_error) {
         $self->irc->privmsg($ev->reply_to, "Catfact can has error: " . $res->message);
         return;
       }
-      my $fact = $res->json('/facts/0');
+      my $fact = $res->json('/fact');
       $self->irc->privmsg($ev->reply_to, $fact);
   });
 }
