@@ -21,4 +21,5 @@ requires 'Try::Tiny';
 requires 'Types::Standard';
 requires 'WWW::Shorten';
 requires 'WWW::Shorten::TinyURL';
+requires 'WWW::Shorten::Yourls';
 requires 'YAML::Tiny';
