@@ -1,7 +1,22 @@
 package Borkbot::Module::shorten;
 use Moo;
 use Borkbot::Module;
-use WWW::Shorten qw(TinyURL :short);
+
+has 'shorten_provider' => (
+  is => 'ro',
+  default => sub {
+    my ($self) = @_;
+    $self->bot->config->{shorten}{provider} // 'TinyURL';
+  }
+);
+
+has 'shorten_options' => (
+  is => 'ro',
+  default => sub {
+    my ($self) = @_;
+    $self->bot->{config}{shorten}{options};
+  }
+);
 
 has 'min_len' => (
   is => 'ro',
@@ -10,6 +25,15 @@ has 'min_len' => (
     $self->bot->config->{shorten}{min_len} // 71
   }
 );
+
+sub BUILD {
+  my ($self) = @_;
+  my $module = "WWW::Shorten::" . $self->shorten_provider;
+  (my $file = "$module.pm") =~ s[::][/]g;
+  require $file;
+  $module->import(':short');
+  log_info { "Loaded $module" };
+}
 
 sub do_shorten {
   my ($self, $ev) = @_;
@@ -29,7 +53,7 @@ sub do_shorten {
 
   Mojo::IOLoop->subprocess(
     sub {
-      short_link($url);
+      short_link($url, %{ $self->shorten_options || {} });
     },
     sub {
       my ($subprocess, $err, $short_url) = @_;
