@@ -155,11 +155,11 @@ sub on_irc_privmsg {
                   . " flipped a coin and exploded." );
                 return 1;
             } elsif ( $die->{numsides} < 2 ) {
-                $self->me( $send_to, "completed " . $event->nick
+                $self->action( $send_to, "completed " . $event->nick
                   . "'s infinite loop in five seconds but isn't giving up the answer." );
                 return 1;
             } elsif ( $die->{fudge} ) {
-                $self->me( $send_to, "ate " . $event->nick
+                $self->action( $send_to, "ate " . $event->nick
                   . "'s fudge before it exploded." );
                 return 1;
             }
