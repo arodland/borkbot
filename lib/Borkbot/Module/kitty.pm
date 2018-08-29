@@ -8,7 +8,7 @@ sub on_irc_privmsg {
 
   return 0 unless $ev->{msg} =~ /^\.kitty\s*$/i;
 
-  $self->ua->get('http://thecatapi.com/api/images/get?format=src' => sub {
+  $self->ua->get('https://api.thecatapi.com/api/images/get?format=src' => sub {
       my ($ua, $tx) = @_;
       my $res = $tx->result;
       if ($res->is_error) {
