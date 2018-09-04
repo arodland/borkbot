@@ -54,8 +54,8 @@ sub on_ctcp_version {
   my ($self, $ev) = @_;
   $self->get_version(sub {
     my ($version) = @_;
-    $self->irc->nctcp($ev->reply_to, $version);
-    $self->irc->nctcp($ev->reply_to, $self->get_modules);
+    $self->irc->nctcp($ev->nick, $version);
+    $self->irc->nctcp($ev->nick, $self->get_modules);
   });
   return 1;
 }
