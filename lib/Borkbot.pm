@@ -102,7 +102,7 @@ has 'in_channels' => (
 
 sub in_channel {
   my ($self, $channel) = @_;
-  return exists($self->in_channels->{$channel}) ? 1 : 0;
+  return exists($self->in_channels->{lc $channel}) ? 1 : 0;
 }
 
 sub is_control_channel {
@@ -194,7 +194,7 @@ sub on_irc_join {
   return 0 unless $ev->nick eq $self->irc->nick;
 
   log_info { "Joined " . $ev->channel };
-  $self->in_channels->{$ev->channel} = 1;
+  $self->in_channels->{lc $ev->channel} = 1;
   return 0;
 }
 
@@ -204,7 +204,7 @@ sub on_irc_part {
   return 0 unless $ev->nick eq $self->irc->nick;
 
   log_info { "Left " . $ev->channel };
-  delete $self->in_channels->{$ev->channel};
+  delete $self->in_channels->{lc $ev->channel};
   return 0;
 }
 
