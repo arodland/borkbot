@@ -88,13 +88,13 @@ sub on_irc_privmsg {
   } elsif ($ev->msg =~ /^\.lastsaid\s+([\w\-_\|\^\`]+)/i) {
     $self->do_lastsaid($ev, $1);
   }
-  $self->update_saw($ev) if $ev->visibility eq 'public';
+  $self->update_saw($ev) if $ev->visibility eq 'public' && !$self->is_control_channel($ev->to);
   return 0;
 }
 
 sub on_ctcp_action {
   my ($self, $ev) = @_;
-  $self->update_saw($ev) if $ev->visibility eq 'public';
+  $self->update_saw($ev) if $ev->visibility eq 'public' && !$self->is_control_channel($ev->to);
   return 0;
 }
 
